@@ -2,3 +2,5 @@
 .datapreputils.Rproj
 .Rproj.user
 .Rhistory
+*.Rcheck/
+*.tar.gz
