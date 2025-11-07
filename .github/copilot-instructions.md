@@ -102,7 +102,7 @@ This is an R package repository that provides utility functions to support data 
 2. Write function with roxygen2 documentation
 3. Add `@export` tag if function should be public
 4. Create corresponding test file in `tests/testthat/`
-5. Run `roxygen2::roxygenise()` or equivalent to update documentation
+5. Run `roxygen2::roxygenize()` or equivalent to update documentation
 6. Build and check package: `R CMD build .` then `R CMD check <tarball>`
 
 ### Modifying Existing Functions
