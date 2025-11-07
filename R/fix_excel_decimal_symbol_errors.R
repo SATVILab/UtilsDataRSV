@@ -11,7 +11,6 @@
 #' that uses a period (or full stop, ie. ".") as the decimal separator.
 #'
 #' @param x character vector. Column of data.
-#' @param decimal_symbol_orig "." or ",".
 #'
 #' @details Note that it appears that if an entire column was
 #' read in from Excel where each entry has the same number of numbers

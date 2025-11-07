@@ -3,11 +3,12 @@
 #' @description Wrapper around
 #'
 #' @param data dataframe. Contains data to print.
-#' @param col character. Name of column to group by
+#' @param group character. Name of column to group by
 #' before subsetting.
 #' @param select character vector. Name(s) of columns to
 #' select before printing.
 #' @param n_print numeric. Number of slices to print per group.
+#' @param n_slice numeric. Number of slices to select per group.
 #' @param seed numeric. If not \code{NULL}, then seed is
 #' set to this value. Default is \code{NULL}.
 #' @param sample_within_group logical. If \code{TRUE}
