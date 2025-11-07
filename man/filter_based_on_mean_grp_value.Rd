@@ -35,7 +35,7 @@ Choose subset of data with larger/smaller mean value
 This was written for the situation where the abundance of various types of cells
 are available (e.g. CD4 T cells expressing IFNg+), and where both frequencies and counts are available
 but it is not indicated which column pertains to frequencies and which to counts. Note that
-this function will not work reliably when the response is a frequncy (rather than a proportion)
+this function will not work reliably when the response is a frequency (rather than a proportion)
 and the denominator cell count is not consistently much higher than 100.
 }
 \examples{
