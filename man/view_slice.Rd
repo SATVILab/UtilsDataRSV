@@ -20,10 +20,15 @@ view_slice(
 \arguments{
 \item{data}{dataframe. Contains data to print.}
 
+\item{group}{character. Name of column to group by
+before subsetting.}
+
 \item{select}{character vector. Name(s) of columns to
 select before printing.}
 
 \item{n_print}{numeric. Number of slices to print per group.}
+
+\item{n_slice}{numeric. Number of slices to select per group.}
 
 \item{seed}{numeric. If not \code{NULL}, then seed is
 set to this value. Default is \code{NULL}.}
@@ -44,9 +49,6 @@ Default is \code{NULL}.}
 \item{return}{logical. If \code{TRUE}, then the subsetted
 table is returned. Otherwise, \code{invisible(TRUE)} is
 returned. Default is \code{FALSE}.}
-
-\item{col}{character. Name of column to group by
-before subsetting.}
 }
 \description{
 Wrapper around

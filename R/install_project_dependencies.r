@@ -1,6 +1,6 @@
 #' @title Install suggested packages only if missing
 #'
-#' @descriptions Reads DESCRIPTION file and installs any
+#' @description Reads DESCRIPTION file and installs any
 #' suggested packages that are missing.
 #' Useful in R data packages, as this can be run in
 #' a script to create the data to easily install packages
@@ -10,15 +10,14 @@
 #' Searches for DESCRIPTION file in working directory
 #' and parent of working directory (useful for Rmd's).
 #'
-#' @param stop_on_error logical.
-#' If \code{TRUE}, then an error is thrown if
-#' the DESCRIPTION file cannot be found.
-#' Default is \code{TRUE}.
-#'
 #' @param only_if_missing logical.
 #' If \code{TRUE}, then only installs packages that
 #' are not already installed.
 #' Default is \code{FALSE}.
+#'
+#' @param dependencies character vector.
+#' Types of dependencies to install (e.g., "Imports", "Suggests", "Depends").
+#' Default is \code{c("Imports", "Suggests", "Depends")}.
 #'
 #' @param ... arguments passed to \code{install.packages}.
 #'
@@ -32,20 +31,18 @@
 #' - This is not meant for R packages, but rather packages using
 #' `bookdown`, and others where you don't really install the output.
 #' @return Invisibly returns character vector of installed packages.
+#' @importFrom utils install.packages installed.packages
+#' @importFrom stats setNames
 install_project_dependencies <- function(only_if_missing = TRUE,
                                          dependencies = c("Imports", "Suggests", "Depends"), # nolint
                                          ...) {
   fn <- c("DESCRIPTION", file.path(dirname(getwd()), "DESCRIPTION"))
-  fn <- fn[file.exists(fn)][[1]]
+  fn <- fn[file.exists(fn)]
   if (length(fn) == 0) {
     msg <- "Could not find DESCRIPTION file in working directory or immediate parent." # nolint
-    if (stop_on_error) {
-      stop(msg, call. = FALSE)
-    } else {
-      warning(msg, call. = FALSE)
-      return(invisible(character(0)))
-    }
+    stop(msg, call. = FALSE)
   }
+  fn <- fn[[1]]
   desc_mat <- read.dcf(fn)
   pkg_version_vec <- c("testthat (>= 3.0.0)", "dplyr")
   pkg_version_vec <- NULL
@@ -149,7 +146,7 @@ install_project_dependencies <- function(only_if_missing = TRUE,
 
   if (!is.null(pkg_vec_incorrect_version)) stop(
     paste0("The following packages have out of date versions after installing from CRAN: ",
-           paste0(pkg_version_incorrect_version, collapse = ", "))
+           paste0(pkg_vec_incorrect_version, collapse = ", "))
   )
 
   invisible(pkg_vec)

@@ -8,8 +8,6 @@ convert_character_to_number_correctly(x)
 }
 \arguments{
 \item{x}{character vector. Column of data.}
-
-\item{decimal_symbol_orig}{"." or ",".}
 }
 \description{
 Occasionally numbers are read in from Excel as characters

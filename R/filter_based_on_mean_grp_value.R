@@ -22,9 +22,14 @@
 #' @return A dataframe with only one level of \code{grp_inner} for
 #' each level of \code{grp_outer}.
 #'
-#' @importFrom rlang !! ensym
+#' @importFrom rlang !! ensym .data
+#' @export
 #'
 #' @examples
+#' library(dplyr)
+#' library(tibble)
+#' library(purrr)
+#' library(stringr)
 #' set.seed(3)
 #' test_tbl <- tibble(
 #'   pid = rep(c("id1", "id2", "id1", "id2"), each = 2),
@@ -64,7 +69,7 @@ filter_based_on_mean_grp_value <- function(data,
 
   sel_vec <- mean_tbl %>%
     dplyr::group_by(!!ensym(grp_outer)) %>%
-    dplyr::filter(val_mean == sel_fn(val_mean)) %>%
+    dplyr::filter(.data$val_mean == sel_fn(.data$val_mean)) %>%
     dplyr::ungroup() %>%
     magrittr::extract2(grp_inner)
 

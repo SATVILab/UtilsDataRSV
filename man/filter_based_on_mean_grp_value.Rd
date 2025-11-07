@@ -39,6 +39,10 @@ this function will not work reliably when the response is a frequncy (rather tha
 and the denominator cell count is not consistently much higher than 100.
 }
 \examples{
+library(dplyr)
+library(tibble)
+library(purrr)
+library(stringr)
 set.seed(3)
 test_tbl <- tibble(
   pid = rep(c("id1", "id2", "id1", "id2"), each = 2),
