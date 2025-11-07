@@ -73,7 +73,7 @@ This is an R package repository that provides utility functions to support data 
 - Write tests for all exported functions
 - Include tests for edge cases (NA values, empty inputs, etc.)
 - Use `expect_identical()`, `expect_true()`, `expect_error()` as appropriate
-- Capture output for functions that print to console using `sink()`
+- Use `expect_output()` to test functions that print to console
 - Clean up temporary files in tests
 
 ### 5. Documentation
@@ -102,7 +102,7 @@ This is an R package repository that provides utility functions to support data 
 2. Write function with roxygen2 documentation
 3. Add `@export` tag if function should be public
 4. Create corresponding test file in `tests/testthat/`
-5. Run `roxygen2::roxygenize()` or equivalent to update documentation
+5. Run `roxygen2::roxygenise()` or equivalent to update documentation
 6. Build and check package: `R CMD build .` then `R CMD check <tarball>`
 
 ### Modifying Existing Functions
