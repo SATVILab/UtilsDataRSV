@@ -1,0 +1,149 @@
+* using log directory ‘/home/runner/work/UtilsDataRSV/UtilsDataRSV/UtilsDataRSV.Rcheck’
+* using R version 4.5.2 (2025-10-31)
+* using platform: x86_64-pc-linux-gnu
+* R was compiled by
+    gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0
+    GNU Fortran (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0
+* running under: Ubuntu 24.04.3 LTS
+* using session charset: UTF-8
+* checking for file ‘UtilsDataRSV/DESCRIPTION’ ... OK
+* checking extension type ... Package
+* this is package ‘UtilsDataRSV’ version ‘0.1.0’
+* package encoding: UTF-8
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... NOTE
+Found the following hidden files and directories:
+  .github
+These were most likely included in error. See section ‘Package
+structure’ in the ‘Writing R Extensions’ manual.
+* checking for portable file names ... OK
+* checking for sufficient/correct file permissions ... OK
+* checking whether package ‘UtilsDataRSV’ can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking DESCRIPTION meta-information ... OK
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking code files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking loading without being on the library search path ... OK
+* checking dependencies in R code ... WARNING
+'::' or ':::' imports not declared from:
+  ‘purrr’ ‘versions’
+'loadNamespace' or 'requireNamespace' call not declared from: ‘versions’
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... NOTE
+filter_based_on_mean_grp_value: no visible binding for global variable
+  ‘val_mean’
+install_project_dependencies: no visible binding for global variable
+  ‘stop_on_error’
+install_project_dependencies: no visible global function definition for
+  ‘installed.packages’
+install_project_dependencies: no visible global function definition for
+  ‘setNames’
+install_project_dependencies: no visible global function definition for
+  ‘install.packages’
+install_project_dependencies: no visible binding for global variable
+  ‘pkg_version_incorrect_version’
+Undefined global functions or variables:
+  install.packages installed.packages pkg_version_incorrect_version
+  setNames stop_on_error val_mean
+Consider adding
+  importFrom("stats", "setNames")
+  importFrom("utils", "install.packages", "installed.packages")
+to your NAMESPACE file.
+* checking Rd files ... OK
+* checking Rd metadata ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... WARNING
+Documented arguments not in \usage in Rd file 'convert_character_to_number_correctly.Rd':
+  ‘decimal_symbol_orig’
+
+Undocumented arguments in Rd file 'view_slice.Rd'
+  ‘group’ ‘n_slice’
+Documented arguments not in \usage in Rd file 'view_slice.Rd':
+  ‘col’
+
+Functions with \usage entries need to have the appropriate \alias
+entries, and all their arguments documented.
+The \usage entries must correspond to syntactically valid R code.
+See chapter ‘Writing R documentation files’ in the ‘Writing R
+Extensions’ manual.
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... WARNING
+'::' or ':::' import not declared from: ‘purrr’
+* checking examples ... ERROR
+Running examples in ‘UtilsDataRSV-Ex.R’ failed
+The error most likely occurred in:
+
+> ### Name: cross_df_safe
+> ### Title: Safely cross lists
+> ### Aliases: cross_df_safe
+> 
+> ### ** Examples
+> 
+> 
+> # cross_df_safe automatically
+> # "protects" non-list list elements
+> to_cross_list <- list(
++   V1 = c("a", "b"),
++   V2 = list(3, 4:5)
++ )
+> # returns an error
+> try(purrr::cross_df(to_cross_list))
+Error in loadNamespace(x) : there is no package called ‘purrr’
+> # can avoid this by wrapping each to-cross
+> # element's elements in lists,
+> # but then the crossed dataframe
+> # has second column's elements
+> # each be lists
+> to_cross_list_list <- list(
++   V1 = c("a", "b"),
++   V2 = list(list(3), list(4:5))
++ )
+> cross_df_purrr <- purrr::cross_df(to_cross_list_list)
+Error in loadNamespace(x) : there is no package called ‘purrr’
+Calls: loadNamespace -> withRestarts -> withOneRestart -> doWithOneRestart
+Execution halted
+* checking for unstated dependencies in ‘tests’ ... OK
+* checking tests ... ERROR
+  Running ‘testthat.R’
+Running the tests in ‘tests/testthat.R’ failed.
+Last 13 lines of output:
+   13. │ │ └─base (local) withOneRestart(expr, restarts[[1L]])
+   14. │ │   └─base (local) doWithOneRestart(return(expr), restart)
+   15. │ └─base::stop(cond)
+   16. └─dplyr (local) `<fn>`(`<pckgNtFE>`)
+   17.   └─rlang::abort(message, class = error_class, parent = parent, call = error_call)
+  ── Error ('test-install_project_dependencies.R:2:3'): install_project_dependencies works ──
+  <subscriptOutOfBoundsError/error/condition>
+  Error in `fn[file.exists(fn)][[1]]`: subscript out of bounds
+  Backtrace:
+      ▆
+   1. └─UtilsDataRSV:::install_project_dependencies() at test-install_project_dependencies.R:2:3
+  
+  [ FAIL 4 | WARN 0 | SKIP 0 | PASS 18 ]
+  Error: Test failures
+  Execution halted
+* checking PDF version of manual ... WARNING
+LaTeX errors when creating PDF version.
+This typically indicates Rd problems.
+* checking PDF version of manual without index ... ERROR
+Re-running with no redirection of stdout/stderr.
+* DONE
+Status: 3 ERRORs, 4 WARNINGs, 2 NOTEs

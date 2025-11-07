@@ -1,0 +1,6 @@
+%>%	pipe
+convert_character_to_number_correctly	convert_character_to_number_correctly
+cross_df_safe	cross_df_safe
+filter_based_on_mean_grp_value	filter_based_on_mean_grp_value
+view_cols	view_cols
+view_slice	view_slice

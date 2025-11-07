@@ -1,0 +1,390 @@
+\nonstopmode{}
+\documentclass[letterpaper]{book}
+\usepackage[times,inconsolata,hyper]{Rd}
+\usepackage{makeidx}
+\makeatletter\@ifl@t@r\fmtversion{2018/04/01}{}{\usepackage[utf8]{inputenc}}\makeatother
+% \usepackage{graphicx} % @USE GRAPHICX@
+\makeindex{}
+\begin{document}
+\chapter*{}
+\begin{center}
+{\textbf{\huge Package `UtilsDataRSV'}}
+\par\bigskip{\large \today}
+\end{center}
+\ifthenelse{\boolean{Rd@use@hyper}}{\hypersetup{pdftitle = {UtilsDataRSV: Facilitate data processing}}}{}
+\begin{description}
+\raggedright{}
+\item[Type]\AsIs{Package}
+\item[Title]\AsIs{Facilitate data processing}
+\item[Version]\AsIs{0.1.0}
+\item[Author]\AsIs{Miguel Julio Rodo}
+\item[Maintainer]\AsIs{Miguel Julio Rodo }\email{rdxmig002@myuctac.za}\AsIs{}
+\item[Description]\AsIs{Utility functions to support data pre-processing, 
+by allowing things like (more) quickly viewing unique data entries 
+by columns and groups. }
+\item[License]\AsIs{MIT + file LICENSE}
+\item[Encoding]\AsIs{UTF-8}
+\item[Suggests]\AsIs{testthat (>= 3.0.0)}
+\item[Config/testthat/edition]\AsIs{3}
+\item[Imports]\AsIs{tibble, magrittr, stringr, dplyr, rlang}
+\item[RoxygenNote]\AsIs{7.1.2}
+\item[NeedsCompilation]\AsIs{no}
+\end{description}
+\Rdcontents{Contents}
+\HeaderA{convert\_character\_to\_number\_correctly}{Fix Excel decimal symbol errors}{convert.Rul.character.Rul.to.Rul.number.Rul.correctly}
+%
+\begin{Description}
+Occasionally numbers are read in from Excel as characters
+and R does not correctly convert these characters to numbers. This function
+splits each number-as-character into integer and fraction parts
+(around whatever decimal indicator is present) and adds them. NOTE: Please do
+check output.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+convert_character_to_number_correctly(x)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] character vector. Column of data.
+
+\item[\code{decimal\_symbol\_orig}] "." or ",".
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}
+This function corrects (most) errors arising from
+importing an Excel/CSV file that was created on a system
+that uses a period (or full stop, ie. ".") as the decimal separator.
+
+Note that it appears that if an entire column was
+read in from Excel where each entry has the same number of numbers
+and has the decimal in the same place, then readr::read\_csv (at least)
+will for some reason read in the column without the comma at all. This function
+will not fix that.
+\end{Details}
+%
+\begin{Examples}
+\begin{ExampleCode}
+# vector of data (as if from Excel)
+x <- c("1,32", "1", "0,23", "3,23E-2", NA)
+x_period <- c("1.32", "1", "0.23", "3.23E-2", NA)
+# original data alongside corrected data
+data.frame(orig = x, replacement = convert_character_to_number_correctly(x = x))
+\end{ExampleCode}
+\end{Examples}
+\HeaderA{cross\_df\_safe}{Safely cross lists}{cross.Rul.df.Rul.safe}
+%
+\begin{Description}
+Returns the cartesian of all its elements in a list
+as a dataframe, with one combination per row.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+cross_df_safe(.l, .filter = NULL)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{.l}] A list of lists or atomic vectors (or, a dataframe).
+
+\item[\code{.filter}] function.
+A predicate function that takes the same number of arguments
+as the number of variables to be combined.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}
+Elements in the list to be crossed
+such as \code{list(1, 2:3)} keep
+their multi-length elements in one combination
+(i.e. one dataframe row).
+That is the sense in which is "safe",
+as it behaves as expected in that
+not only lists are "guarded", i.e. not joined together.
+
+The function `purrr::cross` returns an error
+in this case, whilst `purrr::cross` piped
+`purrr::map\_df(tibble::as\_tibble)` w
+creates two combinations (two dataframe rows)
+from the second list element above.
+One could wrap the second element in a list, but
+that adds an extra layer when accessing the element
+in the combination.
+
+Another advantage
+
+See examples for a demonstration.
+\end{Details}
+%
+\begin{Value}
+A dataframe with the same number of rows as
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+# cross_df_safe automatically
+# "protects" non-list list elements
+to_cross_list <- list(
+  V1 = c("a", "b"),
+  V2 = list(3, 4:5)
+)
+# returns an error
+try(purrr::cross_df(to_cross_list))
+# can avoid this by wrapping each to-cross
+# element's elements in lists,
+# but then the crossed dataframe
+# has second column's elements
+# each be lists
+to_cross_list_list <- list(
+  V1 = c("a", "b"),
+  V2 = list(list(3), list(4:5))
+)
+cross_df_purrr <- purrr::cross_df(to_cross_list_list)
+cross_df_purrr$V2
+# returns a four-row dataframe, where
+# second column has elements of lengths 1, 1, 2 and 2
+# that are not lists
+cross_df_sf <- cross_df_safe(to_cross_list)
+cross_df_sf$V2
+# the above is more natural to work with
+# no element in a combination
+# is needlessly wrapped inside an unnamed list of length 1
+
+#
+to_cross_list_list <- list(
+  V1 = c(list("a"), list("b")),
+  V2 = list(
+    c("a" = "c"),
+    c("b" = "d")
+  )
+)
+
+cross_df_std <- purrr::cross_df(to_cross_list_list)
+cross_df_sf <- cross_df_safe(to_cross_list_list)
+# purr:cross_df needlessly places each element of V2
+# (e.g. list("a" = "c")) in its own list:
+cross_df_std$V2
+# the above means that to refer to the element, you need to
+# add an extra set of brackets:
+# cross_df_std$V2[[1]][[1]]
+# in this case, however,cross_df_safe flattens the list by one level:
+cross_df_sf$V2
+# so that you can refer to individual elements more succinctly:
+cross_df_sf$V2[[1]]
+\end{ExampleCode}
+\end{Examples}
+\HeaderA{filter\_based\_on\_mean\_grp\_value}{Choose subset of data with larger/smaller mean value}{filter.Rul.based.Rul.on.Rul.mean.Rul.grp.Rul.value}
+%
+\begin{Description}
+Choose subset of data with larger/smaller mean value
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+filter_based_on_mean_grp_value(data, val, grp_outer, grp_inner, sel)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{data}] dataframe. Dataframe for which subset(s) should be chosen.
+
+\item[\code{val}] character. Name of column in \code{data} containing the data
+whose mean determines which group in \code{group\_inner} to choose.
+
+\item[\code{grp\_outer}] character. Name of column in \code{data} indicating
+a group of entries for which only one level in \code{grp\_inner} should be chosen.
+
+\item[\code{grp\_inner}] character. Name of of column in \code{data} indicating
+the sub-groups in grp\_outer. Only one level of grp\_inner will be chosen per
+level of grp\_outer.
+
+\item[\code{sel}] 'smaller' or 'larger'. Level of \code{grp\_inner} will be
+chosen per level of \code{grp\_outer} such that it has the smallest mean
+of all groups (as defined by \code{grp\_inner}) for that level of \code{grp\_outer},
+if \code{sel == 'smaller'}. Opposite if \code{sel == 'larger'}. No default.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}
+This was written for the situation where the abundance of various types of cells
+are available (e.g. CD4 T cells expressing IFNg+), and where both frequencies and counts are available
+but it is not indicated which column pertains to frequencies and which to counts. Note that
+this function will not work reliably when the response is a frequncy (rather than a proportion)
+and the denominator cell count is not consistently much higher than 100.
+\end{Details}
+%
+\begin{Value}
+A dataframe with only one level of \code{grp\_inner} for
+each level of \code{grp\_outer}.
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+set.seed(3)
+test_tbl <- tibble(
+  pid = rep(c("id1", "id2", "id1", "id2"), each = 2),
+  type = c(paste0(rep(c("a", "b"), each = 4), rep(c("", "_1"), 4)))
+) %>%
+  mutate(type_base = stringr::str_remove(type, "_1")) %>%
+  group_by(pid, type_base) %>%
+  mutate(resp = purrr::map_dbl(type_base, function(x) {
+    round(rnorm(1, 5 + stringr::str_detect(x, "b") * 3), 2)
+  })[1]) %>%
+  ungroup() %>%
+  mutate(resp = ifelse(str_detect(type, "_1"), rep(runif(4, 1e4, 1e5), each = 2), 1) * resp)
+
+test_tbl
+
+filter_based_on_mean_grp_value(
+  data = test_tbl, val = "resp", grp_outer = "type_base",
+  grp_inner = "type", sel = "smaller"
+)
+\end{ExampleCode}
+\end{Examples}
+\HeaderA{view\_cols}{View random sample of unique column entries}{view.Rul.cols}
+%
+\begin{Description}
+Displays up to \code{n\_entry} unique entries for the first
+\code{n\_col} columns. Note that \code{NA} is always included amongst
+displayed entries if present.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+view_cols(x, n_entry = 20, n_entry_num = 5, n_col = 100, silent = FALSE)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] dataframe. Dataframe for which unique column entries should be displayed.
+
+\item[\code{n\_entry}] integer. Maximum of unique entries to display per
+column. Set equal to \code{Inf} if you want to
+see all unique column entries. Default is 20.
+
+\item[\code{n\_entry\_num}] Maximum number of unique entries to display for numeric columns.
+Set equal to \code{Inf} if you want to see all unique entries. If \code{NULL},
+then \code{n\_entry} is used for numeric columns as well. Default is 5.
+
+\item[\code{n\_col}] integer. Maximum number of columns to display unique entries for.
+A message is by default displayed if fewer than all the columns
+have their data data displayed. Set equal
+to \code{Inf} if all columns should be displayed. If not an integer but still a number,
+then the integer component number of columns is displayed.  Default for \code{n\_col} is 1e2.
+
+\item[\code{silent}] logical. If \code{TRUE}, then a message about there
+being fewer columns displayed than total columns available is not printed.
+Default is \code{FALSE}.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Examples}
+\begin{ExampleCode}
+test_df <- data.frame(x = rnorm(1e3), y = sample(c("a", "b"),
+  size = 1e3,
+  replace = TRUE
+))
+view_cols(test_df)
+\end{ExampleCode}
+\end{Examples}
+\HeaderA{view\_slice}{Print slices per group of a dataframe}{view.Rul.slice}
+%
+\begin{Description}
+Wrapper around
+
+Returns subsetted data invisibly.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+view_slice(
+  data,
+  group,
+  select = NULL,
+  n_print = 1000,
+  n_slice = 1,
+  seed = NULL,
+  sample_within_group = FALSE,
+  sample = FALSE,
+  prop_sample = NULL,
+  return = FALSE
+)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{data}] dataframe. Contains data to print.
+
+\item[\code{select}] character vector. Name(s) of columns to
+select before printing.
+
+\item[\code{n\_print}] numeric. Number of slices to print per group.
+
+\item[\code{seed}] numeric. If not \code{NULL}, then seed is
+set to this value. Default is \code{NULL}.
+
+\item[\code{sample\_within\_group}] logical. If \code{TRUE}
+and sampling is selected, then sampling is performed
+within each group. Otherwise sampling is performed across
+the whole table. Default is \code{FALSE}.
+
+\item[\code{sample}] logical. If \code{TRUE}, then
+rows are sampled. Unless \code{prop\_sample} is specified,
+then \code{n\_slice} rows are sampled.
+
+\item[\code{prop\_sample}] numeric. If not \code{NULL}, then
+proportion of rows to sample. Overrides \code{n\_slice}.
+Default is \code{NULL}.
+
+\item[\code{return}] logical. If \code{TRUE}, then the subsetted
+table is returned. Otherwise, \code{invisible(TRUE)} is
+returned. Default is \code{FALSE}.
+
+\item[\code{col}] character. Name of column to group by
+before subsetting.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Examples}
+\begin{ExampleCode}
+data("cars")
+cars[, "grp"] <- rep(letters[1:5], each = 10)
+view_slice(cars, group = "grp", n_slice = 2)
+\end{ExampleCode}
+\end{Examples}
+\HeaderA{\Rpercent{}>\Rpercent{}}{Pipe operator}{.Rpcent.>.Rpcent.}
+\keyword{internal}{\Rpercent{}>\Rpercent{}}
+%
+\begin{Description}
+See \code{magrittr::\LinkA{\Rpercent{}>\Rpercent{}}{.Rpcent.>.Rpcent.}} for details.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+lhs %>% rhs
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{lhs}] A value or the magrittr placeholder.
+
+\item[\code{rhs}] A function call using the magrittr semantics.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+The result of calling `rhs(lhs)`.
+\end{Value}
+\printindex{}
+\end{document}

@@ -1,0 +1,18 @@
+Package: UtilsDataRSV
+Type: Package
+Title: Facilitate data processing
+Version: 0.1.0
+Author: Miguel Julio Rodo
+Maintainer: Miguel Julio Rodo <rdxmig002@myuctac.za>
+Description: Utility functions to support data pre-processing, 
+    by allowing things like (more) quickly viewing unique data entries 
+    by columns and groups. 
+License: MIT + file LICENSE
+Encoding: UTF-8
+Suggests: testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Imports: tibble, magrittr, stringr, dplyr, rlang
+RoxygenNote: 7.1.2
+NeedsCompilation: no
+Packaged: 2025-11-07 19:21:53 UTC; runner
+Built: R 4.5.2; ; 2025-11-07 19:22:06 UTC; unix
