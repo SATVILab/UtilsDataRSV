@@ -1,8 +1,0 @@
-convert_character_to_number_correctly
-                        Fix Excel decimal symbol errors
-cross_df_safe           Safely cross lists
-filter_based_on_mean_grp_value
-                        Choose subset of data with larger/smaller mean
-                        value
-view_cols               View random sample of unique column entries
-view_slice              Print slices per group of a dataframe
