@@ -118,8 +118,8 @@ test_that("view_slice handles input validation errors", {
   expect_error(view_slice(cars, group = "grp", n_print = "abc"), "n_print must be of class numeric")
 
   # Test invalid prop_sample argument
-  expect_error(view_slice(cars, group = "grp", prop_sample = 1.5), "prop_sample must be be between 0 and 1")
-  expect_error(view_slice(cars, group = "grp", prop_sample = -0.5), "prop_sample must be be between 0 and 1")
+  expect_error(view_slice(cars, group = "grp", prop_sample = 1.5), "prop_sample must be between 0 and 1")
+  expect_error(view_slice(cars, group = "grp", prop_sample = -0.5), "prop_sample must be between 0 and 1")
 
   # Test invalid return argument
   expect_error(view_slice(cars, group = "grp", return = "yes"), "return must be logical")
