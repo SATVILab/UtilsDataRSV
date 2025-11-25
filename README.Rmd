@@ -16,33 +16,56 @@ knitr::opts_chunk$set(
 # UtilsDataRSV
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/SATVILab/UtilsDataRSV/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SATVILab/UtilsDataRSV/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/SATVILab/UtilsDataRSV/graph/badge.svg)](https://codecov.io/gh/SATVILab/UtilsDataRSV)
 <!-- badges: end -->
 
-The goal of UtilsDataRSV is to make miscellaneous data processing tasks easier. 
+UtilsDataRSV is an R package that provides utility functions for common data pre-processing tasks. It helps streamline workflows by offering tools to quickly inspect data, fix common import errors, and perform group-based data operations.
+
+## Features
+ 
+- **Data Inspection**: View unique column entries and group-based data slices
+- **Data Cleaning**: Fix Excel decimal symbol errors from locale mismatches
+- **Data Manipulation**: Safe list crossing and group-based filtering utilities
 
 ## Installation
 
-You can install UtilsDataRSV from [GitHub](https://www.github.com) with:
+You can install UtilsDataRSV from [GitHub](https://github.com/SATVILab/UtilsDataRSV) with:
 
 ```{r , eval = FALSE}
 if (!require("remotes", quietly = TRUE)) install.packages("remotes")
-remotes::install_github("MiguelRodo/UtilsDataRSV.git")
+remotes::install_github("SATVILab/UtilsDataRSV")
 ```
 
 ## Examples
 
-Load the package. 
 ```{r }
 library(UtilsDataRSV)
 ```
 
-Display a random selection of (a limited number) of unique entries from each column. 
+### View unique column entries
+
+`view_cols()` displays a random sample of unique entries for each column in a dataframe, useful for quickly understanding data structure and content.
+
 ```{r view_cols}
 data("mtcars")
 view_cols(mtcars)
 ```
 
-Correct error where Excel reads in incorrectly due to differences in the decimal symbol between systems. At present only fixes error where original data uses a comma and system being read into uses a full stop. 
+### View data slices by group
+
+`view_slice()` shows a subset of entries per group, a convenient wrapper around `dplyr::group_by()` and `dplyr::slice()`.
+
+```{r view_slice}
+data("cars")
+cars[, "grp"] <- rep(letters[1:5], each = 10)
+view_slice(cars, group = "grp", n_slice = 2)
+```
+
+### Fix Excel decimal symbol errors
+
+`convert_character_to_number_correctly()` fixes errors when Excel exports numbers using comma as the decimal separator but R expects a period.
+
 ```{r convert_character_to_number_correctly}
 # vector of data (as if from Excel)
 x <- c("1,32", "1", "0,23", "3,23E-2", NA)
@@ -51,9 +74,7 @@ x_corrected <- convert_character_to_number_correctly(x = x)
 tibble::tibble(original = x, corrected = x_corrected)
 ```
 
-Display a subset of entries per group (a thin wrapper around `dplyr::group_by` and `dplyr::slice`).
-```{r view_slice}
-data("cars")
-cars[, "grp"] <- rep(letters[1:5], each = 10)
-view_slice(cars, group = "grp", n_slice = 2)
-```
+## Additional Functions
+
+- `cross_df_safe()`: Safely cross lists into a dataframe, handling multi-length elements without unexpected expansion
+- `filter_based_on_mean_grp_value()`: Filter data to keep only groups with the smallest or largest mean value
