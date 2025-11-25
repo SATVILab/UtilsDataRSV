@@ -66,7 +66,7 @@ view_slice <- function(data, group, select = NULL, n_print = 1e3,
   }
   if (!is.null(prop_sample)) {
     if (prop_sample < 0 || prop_sample > 1) {
-      stop("prop_sample must be be between 0 and 1 if not NULL")
+      stop("prop_sample must be between 0 and 1 if not NULL")
     }
   }
   if (!is.logical(return)) stop("return must be logical")
