@@ -18,6 +18,16 @@ jobs:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
     steps:
+      - name: Check that CODECOV_TOKEN is set (debug)
+        run: |
+          if [ -z "${CODECOV_TOKEN}" ]; then
+            echo "CODECOV_TOKEN is EMPTY in this job"
+            exit 1
+          else
+            echo "CODECOV_TOKEN is set (not printing it for safety)"
+          fi
+        shell: bash
+  
       - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-r@v2
