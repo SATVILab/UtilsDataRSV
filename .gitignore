@@ -4,3 +4,4 @@
 .Rhistory
 *.Rcheck/
 *.tar.gz
+docs
